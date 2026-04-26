@@ -1,3 +1,12 @@
+import { useEffect } from "react";
+
+import { useDispatch } from "react-redux";
+
+import {
+  onAuthStateChangedListener,
+  createUserDocumentFromAuth,
+} from "./utils/firebase/firebase.utils";
+
 import { Routes, Route } from "react-router-dom";
 
 import Navigation from "./routes/navigation/navigation.component";
@@ -7,7 +16,22 @@ import Shop from "./routes/shop/shop.component";
 import Authentication from "./routes/authentication/authentication.component";
 import Checkout from "./routes/checkout/checkout.component";
 
+import { setCurrentUser } from "./store/user/user.action";
+
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChangedListener((user) => {
+      if (user) {
+        createUserDocumentFromAuth(user);
+      }
+      dispatch(setCurrentUser(user));
+    });
+
+    return unsubscribe; //this is to close the listener when the component unmounts
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<Navigation />}>

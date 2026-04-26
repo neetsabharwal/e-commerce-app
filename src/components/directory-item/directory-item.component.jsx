@@ -7,7 +7,7 @@ import {
 } from "./directory-item.styles";
 
 const DirectoryItem = ({ category }) => {
-  const { route, id, title, imageUrl } = category;
+  const { route, title, imageUrl } = category;
   const navigate = useNavigate();
 
   const onNavigateHandler = () => navigate(route);
